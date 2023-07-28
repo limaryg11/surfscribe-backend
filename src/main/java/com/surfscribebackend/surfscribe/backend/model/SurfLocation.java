@@ -1,26 +1,39 @@
 package com.surfscribebackend.surfscribe.backend.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Document(collection="surfLocations")
+
+@Document(collection = "surfLocations")
 public class SurfLocation {
     @Id
     private String id;
     private String name;
     private String description;
+
+    @DBRef
+    private List<Note> notes;
+
 //    private String userId
 
+
     public SurfLocation() {
+
 
     }
 
     public SurfLocation(String name, String description) {
         this.name = name;
         this.description = description;
+//        Note defaultNote = new Note("Default Note", LocalDateTime.now());
+//        this.notes.add(defaultNote);
     }
+
 
     public String getId() {
         return id;
@@ -30,11 +43,11 @@ public class SurfLocation {
         this.id = id;
     }
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
-    public void setname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -46,12 +59,40 @@ public class SurfLocation {
         this.description = description;
     }
 
+    // Getter for notes
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
+    // Method to add a note to the list of notes
+    public void addNote(Note note) {
+        this.notes.add(note);
+    }
+
+    // Setter for timestamp of a note
+    public void setTimestampForNote(String noteId, LocalDateTime timestamp) {
+        for (Note note : notes) {
+            if (note.getId().equals(noteId)) {
+                note.setTimeStamp(timestamp);
+                return;
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "SurfLocation{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", description=" + description +
+                ", description='" + description + '\'' +
+                ", notes=" + notes +
                 '}';
     }
+
+
 }

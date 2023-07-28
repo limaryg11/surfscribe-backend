@@ -1,10 +1,16 @@
 package com.surfscribebackend.surfscribe.backend.controller;
 
+import com.surfscribebackend.surfscribe.backend.exceptions.ResourceNotFoundException;
+import com.surfscribebackend.surfscribe.backend.model.Note;
 import com.surfscribebackend.surfscribe.backend.model.SurfLocation;
+import com.surfscribebackend.surfscribe.backend.repository.NoteRepository;
 import com.surfscribebackend.surfscribe.backend.repository.SurfLocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -18,10 +24,12 @@ import java.util.Optional;
 @RequestMapping("/surf-locations")
 public class SurfLocationController {
     private final SurfLocationRepository surfLocationRepository;
+    private final NoteRepository noteRepository;
 
     @Autowired
-    public SurfLocationController(SurfLocationRepository surfLocationRepository) {
+    public SurfLocationController(SurfLocationRepository surfLocationRepository, NoteRepository noteRepository) {
         this.surfLocationRepository = surfLocationRepository;
+        this.noteRepository = noteRepository;
     }
 
     @GetMapping
@@ -36,11 +44,31 @@ public class SurfLocationController {
         return surfLocation.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+//    @PostMapping
+//    public ResponseEntity<SurfLocation> addSurfLocation(@RequestBody SurfLocation surfLocation) {
+//        Note defaultNote = new Note("Default Note", LocalDateTime.now());
+//        surfLocation.getNotes().add(defaultNote);
+//        SurfLocation savedSurfLocation = surfLocationRepository.save(surfLocation);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedSurfLocation);
+//    }
     @PostMapping
     public ResponseEntity<SurfLocation> addSurfLocation(@RequestBody SurfLocation surfLocation) {
+        if (surfLocation.getNotes() == null) {
+            surfLocation.setNotes(new ArrayList<>());
+        }
+        // Create a default Note and save it to the database
+        Note defaultNote = new Note("Default Note", LocalDateTime.now());
+        noteRepository.save(defaultNote);
+
+        // Add the default Note to the SurfLocation
+        surfLocation.getNotes().add(defaultNote);
+
+        // Save the SurfLocation
         SurfLocation savedSurfLocation = surfLocationRepository.save(surfLocation);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSurfLocation);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<SurfLocation> updateSurfLocation(@PathVariable String id, @RequestBody SurfLocation updatedSurfLocation) {
