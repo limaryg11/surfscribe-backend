@@ -1,5 +1,7 @@
 package com.surfscribebackend.surfscribe.backend.controller;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.surfscribebackend.surfscribe.backend.exceptions.ResourceNotFoundException;
 import com.surfscribebackend.surfscribe.backend.model.Note;
 import com.surfscribebackend.surfscribe.backend.model.SurfLocation;
@@ -10,15 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/surf-locations")
@@ -44,13 +44,7 @@ public class SurfLocationController {
         return surfLocation.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-//    @PostMapping
-//    public ResponseEntity<SurfLocation> addSurfLocation(@RequestBody SurfLocation surfLocation) {
-//        Note defaultNote = new Note("Default Note", LocalDateTime.now());
-//        surfLocation.getNotes().add(defaultNote);
-//        SurfLocation savedSurfLocation = surfLocationRepository.save(surfLocation);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(savedSurfLocation);
-//    }
+
     @PostMapping
     public ResponseEntity<SurfLocation> addSurfLocation(@RequestBody SurfLocation surfLocation) {
         if (surfLocation.getNotes() == null) {
@@ -81,6 +75,27 @@ public class SurfLocationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SurfLocation> patchSurfLocation(@PathVariable String id, @RequestBody Map<String, Object> patchRequest) {
+        // Find the existing SurfLocation in the database
+        SurfLocation existingSurfLocation = surfLocationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SurfLocation not found with id: " + id));
+
+        // Update the fields from the patchRequest if they are present
+        if (patchRequest.containsKey("name")) {
+            existingSurfLocation.setName((String) patchRequest.get("name"));
+        }
+        if (patchRequest.containsKey("description")) {
+            existingSurfLocation.setDescription((String) patchRequest.get("description"));
+        }
+
+        // Save the updated SurfLocation to the database
+        SurfLocation savedSurfLocation = surfLocationRepository.save(existingSurfLocation);
+
+        return ResponseEntity.ok(savedSurfLocation);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSurfLocation(@PathVariable String id) {

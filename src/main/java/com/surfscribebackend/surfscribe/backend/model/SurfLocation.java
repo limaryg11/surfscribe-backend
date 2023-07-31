@@ -1,5 +1,8 @@
 package com.surfscribebackend.surfscribe.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonMerge;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,17 +16,20 @@ import java.util.List;
 public class SurfLocation {
     @Id
     private String id;
+    @JsonMerge
     private String name;
+    @JsonMerge
     private String description;
 
+    @JsonManagedReference
     @DBRef
+    @JsonMerge
     private List<Note> notes;
 
 //    private String userId
 
 
     public SurfLocation() {
-
 
     }
 

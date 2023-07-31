@@ -1,5 +1,7 @@
 package com.surfscribebackend.surfscribe.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,6 +15,7 @@ public class Note {
     private String text;
     private LocalDateTime timeStamp;
 
+    @JsonBackReference
     @DBRef
     private SurfLocation surfLocation;
 
@@ -64,7 +67,18 @@ public class Note {
         return surfLocation;
     }
 
+
     public void setSurfLocation(SurfLocation surfLocation) {
         this.surfLocation = surfLocation;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id='" + id + '\'' +
+                ", text='" + text + '\'' +
+                ", timeStamp=" + timeStamp +
+                '}';
     }
 }

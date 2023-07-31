@@ -67,6 +67,8 @@ public class NoteController {
         if (optionalSurfLocation.isPresent()) {
             SurfLocation surfLocation = optionalSurfLocation.get();
 
+            note.setTimeStamp(LocalDateTime.now());
+
             Note savedNote = noteRepository.save(note);
             surfLocation.getNotes().add(savedNote);
             surfLocationRepository.save(surfLocation);
@@ -130,91 +132,3 @@ public class NoteController {
         return ResponseEntity.noContent().build();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@RestController
-//@RequestMapping("/notes")
-//public class NoteController {
-//    private final NoteRepository noteRepository;
-//    private final SurfLocationRepository surfLocationRepository;
-//
-//    @Autowired
-//    public NoteController(NoteRepository noteRepository, SurfLocationRepository surfLocationRepository) {
-//        this.noteRepository = noteRepository;
-//        this.surfLocationRepository = surfLocationRepository;
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<List<Note>> getAllNotes() {
-//        List<Note> notes = noteRepository.findAll();
-//        return new ResponseEntity<>(notes, HttpStatus.OK);
-//    }
-//
-//    // Get a specific note by ID
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Note> getNoteById(@PathVariable String id) {
-//        Optional<Note> optionalNote = noteRepository.findById(id);
-//        return optionalNote.map(note -> new ResponseEntity<>(note, HttpStatus.OK))
-//                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-//    }
-//
-//    // Create a new note
-//    @PostMapping
-//    public ResponseEntity<Note> createNote(@RequestBody Note note) {
-//        // Ensure that the surfLocation property references an existing SurfLocation
-//        SurfLocation existingSurfLocation = surfLocationRepository.findById(note.getSurfLocation().getId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid SurfLocation ID"));
-//
-//        note.setSurfLocation(existingSurfLocation);
-//
-//        Note savedNote = noteRepository.save(note);
-//        return new ResponseEntity<>(savedNote, HttpStatus.CREATED);
-//    }
-//
-//    // Update an existing note
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Note> updateNote(@PathVariable String id, @RequestBody Note note) {
-//        Optional<Note> optionalNote = noteRepository.findById(id);
-//        if (optionalNote.isPresent()) {
-//            Note existingNote = optionalNote.get();
-//            existingNote.setText(note.getText());
-//            existingNote.setTimeStamp(note.getTimeStamp());
-//            existingNote.setSurfLocation(note.getSurfLocation());
-//            Note updatedNote = noteRepository.save(existingNote);
-//            return new ResponseEntity<>(updatedNote, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-//
-//    // Delete a note
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Note> deleteNote(@PathVariable String id) {
-//        Optional<Note> optionalNote = noteRepository.findById(id);
-//        if (optionalNote.isPresent()) {
-//            Note note = optionalNote.get();
-//            noteRepository.delete(note);
-//            return new ResponseEntity<>(note, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-//}
