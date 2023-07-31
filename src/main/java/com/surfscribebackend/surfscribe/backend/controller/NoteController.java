@@ -28,35 +28,6 @@ public class NoteController {
         this.noteRepository = noteRepository;
         this.surfLocationRepository = surfLocationRepository;
     }
-    // Create a new note for a specific surf location
-//    @PostMapping("/{surfLocationId}/notes")
-//    public ResponseEntity<Note> createNote(
-//            @PathVariable String surfLocationId,
-//            @RequestBody Note newNote
-//    ) {
-//        SurfLocation surfLocation = surfLocationRepository.findById(surfLocationId)
-//                .orElseThrow(() -> new ResourceNotFoundException("SurfLocation not found with id: " + surfLocationId));
-//
-//        newNote.setTimeStamp(LocalDateTime.now());
-//        surfLocation.addNote(newNote);
-//        surfLocationRepository.save(surfLocation);
-//
-//        return ResponseEntity.ok(newNote);
-//    }
-
-//    @PostMapping("/{surfLocationId}/notes")
-//    public ResponseEntity<Note> addNoteToSurfLocation(
-//            @PathVariable String surfLocationId,
-//            @RequestBody Note newNote
-//    ) {
-//        SurfLocation surfLocation = surfLocationRepository.findById(surfLocationId)
-//                .orElseThrow(() -> new ResourceNotFoundException("SurfLocation not found with id: " + surfLocationId));
-//
-//        surfLocation.addNote(newNote);
-//        surfLocationRepository.save(surfLocation);
-//
-//        return ResponseEntity.ok(newNote);
-//    }
 
     @PostMapping("/{surfLocationId}/notes")
     public ResponseEntity<Note> addNoteToSurfLocation(
