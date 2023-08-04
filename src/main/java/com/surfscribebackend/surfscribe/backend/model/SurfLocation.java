@@ -26,18 +26,21 @@ public class SurfLocation {
     @JsonMerge
     private List<Note> notes;
 
-//    private String userId
+    private double latitude;
+    private double longitude;
+
+//    private List<String> photoPaths = new ArrayList<>();
 
 
     public SurfLocation() {
 
     }
 
-    public SurfLocation(String name, String description) {
+    public SurfLocation(String name, String description, double latitude, double longitude) {
         this.name = name;
         this.description = description;
-//        Note defaultNote = new Note("Default Note", LocalDateTime.now());
-//        this.notes.add(defaultNote);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
 
@@ -79,6 +82,31 @@ public class SurfLocation {
     public void addNote(Note note) {
         this.notes.add(note);
     }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    //    public List<String> getPhotoPaths() {
+//        return photoPaths;
+//    }
+//
+//    public void setPhotoPaths(List<String> photoPaths) {
+//        this.photoPaths = photoPaths;
+//    }
+
 
     // Setter for timestamp of a note
     public void setTimestampForNote(String noteId, LocalDateTime timestamp) {
