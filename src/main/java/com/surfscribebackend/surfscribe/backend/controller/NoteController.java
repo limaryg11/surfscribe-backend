@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins={"https://main.d2o4jnykp1k7oq.amplifyapp.com/", "http://main.d2o4jnykp1k7oq.amplifyapp.com/",
+        "http://www.surfscribe.org", "https://www.surfscribe.org", "http://surfscribe.org", "https://surfscribe.org",
+        "http://localhost:3000", "https://localhost:3000"})
 @RequestMapping("/surf-locations")
 public class NoteController {
 
