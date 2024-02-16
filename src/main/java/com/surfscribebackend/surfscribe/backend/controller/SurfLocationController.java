@@ -68,39 +68,6 @@ public class SurfLocationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSurfLocation);
     }
 
-//    @PostMapping("/{id}/upload-photos")
-//    public ResponseEntity<?> uploadPhotos(@PathVariable("id") String surfLocationId,
-//                                          @RequestParam("photos") MultipartFile[] photos) {
-//        // retrieve the surf location by its ID from the database
-//        SurfLocation surfLocation = surfLocationRepository.findById(surfLocationId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Surf Location not found with ID: " + surfLocationId));
-//
-//        // Save the photos to the server
-//        try {
-//            String uploadDirectory = "uploads";
-//
-//            // Create a list to store photo paths
-//            List<String> photoPaths = new ArrayList<>();
-//
-//            for (MultipartFile photo : photos) {
-//                File photoFile = new File(uploadDirectory + photo.getOriginalFilename());
-//                photo.transferTo(photoFile);
-//                photoPaths.add(uploadDirectory + photo.getOriginalFilename());
-//            }
-//
-//            // Save the photo paths in the database
-//            surfLocation.setPhotoPaths(photoPaths);
-//            surfLocationRepository.save(surfLocation);
-//
-//            return ResponseEntity.ok().build();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
-
-
-
 
 
     @PutMapping("/{id}")
